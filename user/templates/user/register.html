@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+    {% block bodyblock %}
+        <form method="POST" action="" class="registration-form">
+          <h2>Sign Up</h2>
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Email address</label>
+              {{ form.email|add_class:'form-control'|attr:"placeholder:Enter Email" }}
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+              {% if form.errors %}
+                {{ form.email.errors }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <label>Username</label>
+              {{ form.username|add_class:'form-control'|attr:"placeholder:Enter Username" }}
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-5">
+                <label for="inputEmail4">Password</label>
+                {{ form.password|add_class:"form-control"|attr:"placeholder:Password"  }}
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputPassword4">Confirm Password</label>
+                {{ form.confirm_password|add_class:"form-control"|attr:"placeholder:Confirm Password"  }}
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputPassword4">Phone</label>
+                {{ form.phone|add_class:"form-control"|attr:"placeholder:Phone"  }}
+              </div>
+            </div>
+
+            <div class="row align-items-end">
+              <div class="col-md-6">
+                {% if '__all__' in form.errors %}
+                  <ul>
+                    <li>Passwords do not match</li>
+                  </ul>  
+                {% endif %}
+              </div>
+
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+            </div>
+          </form>
+    {% endblock %}
