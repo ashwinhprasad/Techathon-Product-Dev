@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
-from .models import UserModel
+from .models import UserModel, SkillModel, AchievementModel, CertificationsModel
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+# from events.models import AnnouncementsModel
 
 # Create your views here.
 def RegisterView(request):
@@ -41,4 +43,14 @@ def UserLogoutView(request):
 
 
 def HomeView(request):
+    announcement = AnnouncementsModel.objects.order_by('date')[0]
     return render(request,'home.html',{})
+
+
+@login_required(login_url='login')
+def ProfileView(request):
+    user_obj = request.user
+    skills = SkillModel.objects.filter(person=user_obj)
+    achievements = AchievementModel.objects.filter(person=user_obj)
+    certifications = CertificationsModel.objects.filter(person=user_obj)    
+    return render(request,'user/profile.html',{'user':user_obj})

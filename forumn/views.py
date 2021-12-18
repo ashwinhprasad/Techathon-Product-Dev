@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
 from .models import AnswerModel, QuestionsModel
 from django.contrib.auth.decorators import login_required
@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='login')
 def QuestionsView(request):
     form = QuestionForm()
-    questionInstances = QuestionsModel.objects.all()
+    questionInstances = QuestionsModel.objects.order_by('-upvotes')[:10]
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -18,6 +18,7 @@ def QuestionsView(request):
         'questionForm':form,
         'questionsList':questionInstances
     })
+
 
 @login_required(login_url='login')
 def AnswerView(request,pk):
@@ -34,3 +35,10 @@ def AnswerView(request,pk):
         'AnswerForm':form,
         'answers':answers
     })
+
+@login_required(login_url='login')
+def UpvoteView(request,pk):
+    question = QuestionsModel.objects.get(id=pk)
+    question.upvotes += 1
+    question.save()
+    return redirect(f'/forum/answer/{pk}')

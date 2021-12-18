@@ -24,6 +24,11 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+class DepartmentModel(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
@@ -42,3 +47,30 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class SkillModel(models.Model):
+    name = models.CharField(max_length=20)
+    person = models.ForeignKey(UserModel,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class AchievementModel(models.Model):
+    name = models.CharField(max_length=20)
+    desc = models.TextField()
+    person = models.ForeignKey(UserModel,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class CertificationsModel(models.Model):
+    name = models.CharField(max_length=50)
+    issuing_organization = models.CharField(max_length=50)
+    data_received = models.DateField()
+    person = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
