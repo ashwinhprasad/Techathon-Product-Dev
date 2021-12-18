@@ -12,7 +12,7 @@ class QuestionsModel(models.Model):
 
 class AnswerModel(models.Model):
     question = models.ForeignKey(QuestionsModel, on_delete=models.CASCADE)
-    answer = models.CharField()
+    answer = models.TextField()
     answer_by = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     def __str__(self):

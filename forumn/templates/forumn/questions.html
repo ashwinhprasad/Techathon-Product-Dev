@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block bodyblock %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ questionForm.as_p }}
+        <input type="submit" value="Ask" />
+    </form>
+    <div class="questions-container">
+        {% for question in questionsList %}
+            <div class="questions-item">
+                <h1>{{ question.title }}</h1>
+                <h2>Asked by - {{ question.asked_by.username }}</h2>
+                <p>{{ question.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
