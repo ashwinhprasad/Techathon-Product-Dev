@@ -43,7 +43,7 @@ def UserLogoutView(request):
 
 
 def HomeView(request):
-    announcement = AnnouncementsModel.objects.order_by('date')[0]
+    # announcement = AnnouncementsModel.objects.order_by('date')[0]
     return render(request,'home.html',{})
 
 

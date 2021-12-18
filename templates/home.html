@@ -1,4 +1,19 @@
 {% extends 'base.html' %}
 {% block bodyblock %}
-    <h1>Home</h1>
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a href="{% url 'home' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;">Welcome
+            {{ user.username }}</b></a>
+    <a href="{% url 'logout' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;"></b>
+        <button type="button" class="btn btn-outline-success">Logout</button>
+    </a>
+</nav>
+<br><br>
+
+<div class="container">
+    <div class="text-center">
+        <a href="{% url 'questionspage' %}"><button type="button" class="btn btn-success">Go to
+                Forum</button></a>
+    </div>
+</div>
+
 {% endblock %}

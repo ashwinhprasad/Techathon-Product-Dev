@@ -1,17 +1,51 @@
 {% extends 'base.html' %}
 {% block bodyblock %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ questionForm.as_p }}
-        <input type="submit" value="Ask" />
-    </form>
-    <div class="questions-container">
-        {% for question in questionsList %}
-            <div class="questions-item">
-                <h1>{{ question.title }}</h1>
-                <h2>Asked by - {{ question.asked_by.username }}</h2>
-                <p>{{ question.description }}</p>
-            </div>
-        {% endfor %}
+{% load widget_tweaks %}
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a href="{% url 'home' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;">Welcome
+            {{ user.username }}</b></a>
+    <a href="{% url 'logout' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;"></b>
+        <button type="button" class="btn btn-outline-success">Logout</button>
+    </a>
+</nav>
+<br>
+<form method="POST">
+    {% csrf_token %}
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <h5>Ask your queries here</h5>
+            </header>
+            <article class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <label>Title</label>
+                    {{ questionForm.title|add_class:"form-control"|attr:"placeholder:Enter the title" }}
+                    <br>
+                    <label>Description</label>
+                    {{ questionForm.description|add_class:"form-control"|attr:"placeholder:Enter the description" }}
+                    <br>
+                    <button type="submit" class="btn btn-outline-success form-control">Post Question</button>
+
+                </form>
+            </article>
+        </div>
     </div>
+</form>
+<br>
+{% for question in questionsList %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ question.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Asked by - {{ question.asked_by.username }}</h6>
+            <p class="card-text">{{ question.description }}</p>
+        </div>
+    </div>
+</div>
+<br>
+{% endfor %}
+
+
 {% endblock %}
