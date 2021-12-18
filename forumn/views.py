@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from .forms import QuestionForm
-from .models import QuestionsModel
+from .forms import QuestionForm, AnswerForm
+from .models import AnswerModel, QuestionsModel
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url='login')
 def QuestionsView(request):
     form = QuestionForm()
     questionInstances = QuestionsModel.objects.all()
@@ -14,4 +17,20 @@ def QuestionsView(request):
     return render(request,'forumn/questions.html',{
         'questionForm':form,
         'questionsList':questionInstances
+    })
+
+@login_required(login_url='login')
+def AnswerView(request,pk):
+    question = QuestionsModel.objects.get(id=pk)
+    form = AnswerForm()
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            ans = AnswerModel(**form.cleaned_data,question=question,answer_by=request.user)
+            ans.save()
+    answers = AnswerModel.objects.filter(question=question)
+    return render(request,'forumn/answer.html',{
+        'question':question,
+        'AnswerForm':form,
+        'answers':answers
     })
