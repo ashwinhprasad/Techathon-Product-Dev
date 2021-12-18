@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
-from .models import AnswerModel, QuestionsModel
+from .models import AnswerModel, QuestionsModel, HashtagModel
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -8,15 +8,24 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='login')
 def QuestionsView(request):
     form = QuestionForm()
-    questionInstances = QuestionsModel.objects.order_by('-upvotes')[:10]
+    tag = request.GET.get('tag') or None
+    if tag is not None:
+        questionInstances = QuestionsModel.objects.filter(hashtagmodel=tag).order_by('-upvotes')[:10]
+    else:
+        questionInstances = QuestionsModel.objects.order_by('-upvotes')[:10]
+    tags = HashtagModel.objects.all()
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
             qm = QuestionsModel(**form.cleaned_data,asked_by=request.user)
             qm.save()
+            tag = HashtagModel.objects.get(tagname=request.POST['tag'])
+            tag.question.add(qm)
+            tag.save()
     return render(request,'forumn/questions.html',{
         'questionForm':form,
-        'questionsList':questionInstances
+        'questionsList':questionInstances,
+        'hashtags':tags
     })
 
 

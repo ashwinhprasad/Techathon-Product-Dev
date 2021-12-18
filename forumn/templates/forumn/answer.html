@@ -1,19 +1,88 @@
 {% extends 'base.html' %}
 {% block bodyblock %}
-    <h1>{{ question.title }}</h1>
-    <h4>{{ question.upvotes }}</h4>   
-    <p>asked by - {{ question.asked_by.username }}</p>
-    <form method="POST">
-        {% csrf_token %}
-        {{ AnswerForm.as_p }}
-        <input type="submit" value="Answer" />
-    </form>
-    <div class="answer-container">
-        {% for answer in answers %}
-        <div class="answer-item">
-            <p>{{ answer.answer }}</p>
-            <h4>{{ answer.answer_by.username }}</h4>
+{% load widget_tweaks %}
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a href="{% url 'home' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;">Logged in as
+            {{ user.username }}</b></a>
+    <a href="{% url 'logout' %}" class="navbar-brand mr-4"><b style="color:#2ba977; margin-left: 10%;"></b>
+        <button type="button" class="btn btn-outline-success">Logout</button>
+    </a>
+</nav>
+<br><br>
+<!-- <form method="POST">
+    {% csrf_token %}
+    {{ AnswerForm.as_p }}
+    <input type="submit" value="Answer" />
+</form> -->
+
+
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ question.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Asked by - {{ question.asked_by.username }}</h6>
+                        <p class="card-text">{{ question.description }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
+        <div class="col-sm-3">
+            <div class="card text-center" style="width: 12rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{question.upvotes}}</h5>
+                    <p class="card-text">Number of upvotes</p>
+                    <a href="{% url 'upvote' question.id %}" class="btn btn-success form-control">Upvote</a>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+<br>
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <h5>Would you like to answer this question?</h5>
+            </header>
+
+
+            <article class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <label>Answer</label>
+                    {{ AnswerForm.answer|add_class:"form-control"|attr:"placeholder:Enter the answer" }}
+                    <br>
+                    <button type="submit" class="btn btn-outline-success form-control">Post Answer</button>
+
+                </form>
+            </article>
+        </div>
+    </div>
+</form>
+<br>
+<div class="answer-container">
+    {% for answer in answers %}
+    <!-- <div class="answer-item">
+        <p>{{ answer.answer }}</p>
+        <h4>{{ answer.answer_by.username }}</h4>
+    </div> -->
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Answered by - {{ answer.answer_by.username }}</h6>
+                <p class="card-text">{{ answer.answer }}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -26,14 +26,44 @@
                     <label>Description</label>
                     {{ questionForm.description|add_class:"form-control"|attr:"placeholder:Enter the description" }}
                     <br>
-                    <button type="submit" class="btn btn-outline-success form-control">Post Question</button>
+                    <label>Hashtag</label>
 
+                    <select class="form-control" name="tag">
+                        {% for tag in hashtags %}
+                            <option value="{{ tag.tagname }}" >{{ tag.tagname }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <button type="submit" class="btn btn-outline-success form-control">Post Question</button>
                 </form>
             </article>
         </div>
     </div>
 </form>
 <br>
+
+<div class="container">
+    <div class="card">
+        <header class="card-header">
+            <h5>Search questions using hashtag</h5>
+        </header>
+        <article class="card-body">
+            <form method="GET">
+                <select name="tag" class="form-control">
+                    {% for tag in hashtags %}
+                        <option value="{{ tag.tagname }}" >{{ tag.tagname }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <input class="btn btn-outline-success form-control" type="submit" value="search" />
+            </form>
+        </article>
+    </div>
+    <br>
+</div>
+
+
+
 {% for question in questionsList %}
 <div class="container">
     <div class="card">
