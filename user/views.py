@@ -35,5 +35,9 @@ def LoginView(request):
     return render(request,'user/login.html',{})
 
 
+def UserLogoutView(request):
+    logout(request)
+    return redirect('login')
+
 def HomeView(request):
     return render(request,'home.html',{})
