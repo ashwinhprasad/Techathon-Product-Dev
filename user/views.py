@@ -33,3 +33,7 @@ def LoginView(request):
             messages.error(request,"Email Id and Password does not Match")
             return redirect('login')
     return render(request,'user/login.html',{})
+
+
+def HomeView(request):
+    return render(request,'home.html',{})
